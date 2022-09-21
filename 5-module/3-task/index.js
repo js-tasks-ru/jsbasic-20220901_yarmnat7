@@ -5,10 +5,20 @@ function initCarousel() {
   const images = document.querySelectorAll(".carousel__slide");
 
   const numOfImages = images.length;
-  const width = images[0].offsetWidth;
+  let width;
   let curImg = 0;
 
   hideLeftArrow(curImg);
+
+  function setSize() {
+    width = images[0].offsetWidth;
+    slider.style.transform = `translateX(${-width * curImg}px)`;
+  }
+
+  window.addEventListener("resize", () => {
+    slider.style.transition = "none";
+    setSize();
+  });
 
   function hideRightArrow(curImg) {
     if (curImg === numOfImages - 1) {
@@ -23,10 +33,12 @@ function initCarousel() {
       return;
     }
   }
+
   function moveSlide() {
-    slider.style.transform = `translateX(${-width * curImg}px)`;
+    setSize();
     slider.style.transition = "transform 0.6s ease-in-out";
   }
+
   arrowRight.addEventListener("click", () => {
     curImg++;
     hideRightArrow(curImg);

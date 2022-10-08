@@ -11,7 +11,7 @@ export default class Modal {
     closeBtn.addEventListener("click", this.close);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        this.close();
+        this.close(), { once: true };
       }
     });
   }

@@ -31,7 +31,6 @@ export default class ProductCard {
 
   #template() {
     return `
-  
     <div class="card">
       <div class="card__top">
         <img src="/assets/images/products/${
@@ -45,8 +44,7 @@ export default class ProductCard {
           <img src="/assets/images/icons/plus-icon.svg" alt="icon"> 
         </button>
         </div>
-      </div>
-  
+      </div> 
     `;
   }
 }

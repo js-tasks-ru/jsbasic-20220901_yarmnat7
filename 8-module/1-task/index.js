@@ -39,36 +39,35 @@ export default class CartIcon {
   }
 
   addEventListeners() {
-    document.addEventListener("scroll", () => this.updatePosition());
+    window.addEventListener("scroll", () => this.updatePosition());
     window.addEventListener("resize", () => this.updatePosition());
   }
 
-  updatePosition() {
-    let initialTopCoord =
-      this.elem.getBoundingClientRect().top + window.pageYOffset;
+  updatePosition = () => {
+    const cart = document.querySelector(".cart-icon");
+    const initialTopCoord = cart.getBoundingClientRect().top;
 
-    if (this.elem.offsetHeight && window.pageYOffset > initialTopCoord) {
-      let leftIndent =
-        Math.min(
-          document.querySelector(".container").getBoundingClientRect().right +
-            20,
-          document.documentElement.clientWidth - this.elem.offsetWidth - 10
-        ) + "px";
+    let leftIndent =
+      Math.min(
+        document.querySelector(".container").getBoundingClientRect().right + 20,
+        document.documentElement.clientWidth - cart.offsetWidth - 10
+      ) + "px";
 
-      Object.assign(this.elem.style, {
+    if (cart.offsetWidth && window.pageYOffset > initialTopCoord) {
+      Object.assign(cart.style, {
         position: "fixed",
-        top: "15px",
+        top: "50px",
         zIndex: 999,
         right: "10px",
         left: leftIndent,
       });
     } else {
-      Object.assign(this.elem.style, {
+      Object.assign(cart.style, {
         position: "",
         top: "",
         left: "",
         zIndex: "",
       });
     }
-  }
+  };
 }

@@ -5,23 +5,20 @@ import Modal from "../../7-module/2-task/index.js";
 
 export default class Cart {
   cartItems = []; // [product: {...}, count: N]
-
   constructor(cartIcon) {
     this.cartIcon = cartIcon;
-    //this.Modal = Modal;
-
     this.addEventListeners();
+    this.renderModal();
   }
 
   addProduct(product) {
-    if (!product || product === null) {
+    if (!product) {
       return;
     }
 
     let cartItem = this.cartItems.find(
       (item) => item.product.id === product.id
     );
-    console.log(cartItem);
 
     if (!cartItem) {
       cartItem = {
@@ -36,17 +33,18 @@ export default class Cart {
 
     console.log(this.cartItems);
   }
+
   updateProductCount(productId, amount) {
     let cartItem = this.cartItems.find((item) => item.product.id === productId);
-    if (!cartItem) {
+    console.log(cartItem);
+    if (cartItem === undefined) {
       return;
     } else {
-      this.cartItems.count = cartItem.count += amount;
-      if (cartItem.count === 0) {
-        this.cartItems = this.cartItems.filter(
-          (item) => item.product.id !== productId
-        );
-      }
+      cartItem.count += amount;
+    }
+    if (cartItem.count === 0) {
+      const idx = this.cartItems.findIndex((item) => item === cartItem);
+      this.cartItems.splice(idx, 1);
     }
     this.onProductUpdate(cartItem);
   }
@@ -56,16 +54,14 @@ export default class Cart {
   }
 
   getTotalCount() {
-    return this.cartItems.map((item) => item.count).reduce((a, b) => a + b, 0);
+    return this.cartItems.reduce((acc, item) => acc + item.count, 0);
   }
 
   getTotalPrice() {
-    let totalPrice = this.cartItems
-      .map((item) => {
-        return item.product.price * item.count;
-      })
-      .reduce((a, b) => a + b, 0);
-    return totalPrice;
+    return this.cartItems.reduce(
+      (acc, item) => acc + item.product.price * item.count,
+      0
+    );
   }
 
   renderProduct(product, count) {
@@ -118,24 +114,49 @@ export default class Cart {
   }
 
   renderModal() {
-    let title = "Your Order";
-
-    let modal = new Modal();
-
-    modal.setTitle(title);
-    this.renderProduct();
-    this.renderOrderForm();
-    modal.setBody(this.renderProduct());
-    modal.setBody(this.renderOrderForm());
+    this.modal = new Modal();
+    this.modal.setTitle("Your order");
+    this.modalBody = document.createElement("div");
+    for (let item of this.cartItems) {
+      this.modalBody.append(this.renderProduct(item.product, item.count));
+    }
+    this.modalBody.append(this.renderOrderForm());
+    this.modal.setBody(this.modalBody);
+    this.modal.open();
+    console.log(this.modalBody);
+    this.modalBody.addEventListener("click", (e) => {
+      const amount = e.target.closest(".cart-counter__button_plus") ? 1 : -1;
+      const productId = e.target.closest(".cart-product[data-product-id]")
+        .dataset.productId;
+      this.updateProductCount(productId, amount);
+    });
+    const modalForm = this.modalBody.querySelector(".cart-form");
+    modalForm.addEventListener("submit", (e) => onSubmit(e));
   }
 
-  onProductUpdate(cartItem) {
-    // ...ваш код
-
+  onProductUpdate = (cartItem) => {
+    let productId = cartItem.product.id; // Уникальный идентификатора товара (для примера)
+    let modalBody = this.modal.elem.querySelector(".modal__body"); //корневой элемент тела модального окна, который мы получили, вызвав метод renderModal
+    console.log(modalBody);
+    // Элемент, который хранит количество товаров с таким productId в корзине
+    let productCount = this.modalBody.querySelector(
+      `[data-product-id="${productId}"] .cart-counter__count`
+    );
+    console.log(productCount);
+    // //Элемент с общей стоимостью всех единиц этого товара
+    // let productPrice = this.modalBody.querySelector(
+    //   `[data-product-id="${productId}"] .cart-product__price`
+    // );
+    // // Элемент с суммарной стоимостью всех товаров
+    // let infoPrice = modalBody.querySelector(`.cart-buttons__info-price`);
+    // productCount.innerHTML = this.getTotalCount(); //новое количество единиц товара
+    // productPrice.innerHTML = `€${(productPrice * productCount).toFixed(2)}`;
+    // infoPrice.innerHTML = `€${this.getTotalPrice().toFixed(2)}`;
     this.cartIcon.update(this);
-  }
+  };
 
-  onSubmit(event) {
+  onSubmit(e) {
+    e.preventDefault();
     // ...ваш код
   }
 

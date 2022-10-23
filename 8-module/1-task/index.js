@@ -53,11 +53,15 @@ export default class CartIcon {
         document.documentElement.clientWidth - cart.offsetWidth - 10
       ) + "px";
 
-    if (cart.offsetWidth && window.pageYOffset > initialTopCoord) {
+    if (!cart.offsetWidth || !cart.offsetHeight) {
+      return;
+    }
+
+    if (window.pageYOffset > initialTopCoord) {
       Object.assign(cart.style, {
         position: "fixed",
         top: "50px",
-        zIndex: 999,
+        zIndex: 1e3,
         right: "10px",
         left: leftIndent,
       });

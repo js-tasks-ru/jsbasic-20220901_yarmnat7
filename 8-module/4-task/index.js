@@ -171,14 +171,15 @@ export default class Cart {
 
     result.then(() => {
       this.modal.setTitle("Success!");
-      this.cartItems = [];
       this.modalBody.innerHTML = `<div class="modal__body-inner">
       <p>
-        Order successful! Your order is being cooked :) <br />
-        We’ll notify you about delivery time shortly.<br />
-        <img src="/assets/images/delivery.gif" />
+      Order successful! Your order is being cooked :) <br />
+      We’ll notify you about delivery time shortly.<br />
+      <img src="/assets/images/delivery.gif" />
       </p>
-    </div>`;
+      </div>`;
+      this.cartItems = [];
+      this.cartIcon.update(this);
     });
   }
 

@@ -24,22 +24,20 @@ export default class Cart {
       cartItem.count += 1;
     }
     this.onProductUpdate(cartItem);
-
-    console.log(this.cartItems);
   }
 
   updateProductCount(productId, amount) {
     let cartItem = this.cartItems.find((item) => item.product.id === productId);
-    console.log(cartItem);
+
     if (cartItem === undefined) {
       return;
     } else {
       cartItem.count += amount;
     }
-    if (cartItem.count === 0) {
-      const idx = this.cartItems.findIndex((item) => item === cartItem);
-      this.cartItems.splice(idx, 1);
-    }
+    if (cartItem.count === 0)
+      if (cartItem.count === 0) {
+        this.cartItems.splice(this.cartItems.indexOf(cartItem), 1);
+      }
     this.onProductUpdate(cartItem);
   }
 

@@ -9,10 +9,6 @@ export default class ProductGrid {
     this.#render();
   }
 
-  // #render() {
-  //   this.elem = createElement(this.#template());
-  // }
-
   #render() {
     this.elem = createElement(`<div class="products-grid">
    <div class="products-grid__inner"></div></div>`);

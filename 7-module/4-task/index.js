@@ -3,7 +3,7 @@ import createElement from "../../assets/lib/create-element.js";
 export default class StepSlider {
   elem = null;
 
-  constructor({ steps, value = 0 }) {
+  constructor({ steps, value }) {
     this.steps = steps;
     this.value = value;
     this.#render();

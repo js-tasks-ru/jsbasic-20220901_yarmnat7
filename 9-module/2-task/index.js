@@ -62,8 +62,8 @@ export default class Main {
     this.cart = new Cart(this.cartIcon);
   }
   async fetchProducts() {
-    const response = await fetch("products.json");
-    return await response.json();
+    const products = await fetch("products.json");
+    return await products.json();
   }
   renderProductsGrid() {
     this.productsGrid = new ProductsGrid(this.products);

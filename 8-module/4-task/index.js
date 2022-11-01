@@ -2,6 +2,7 @@ import createElement from "../../assets/lib/create-element.js";
 import escapeHtml from "../../assets/lib/escape-html.js";
 
 import Modal from "../../7-module/2-task/index.js";
+import CartIcon from "../1-task/index.js";
 
 export default class Cart {
   cartItems = []; // [product: {...}, count: N]
@@ -122,7 +123,6 @@ export default class Cart {
           .dataset.productId;
         const amount = e.target.closest(".cart-counter__button_plus") ? 1 : -1;
         this.updateProductCount(productId, amount);
-        console.log(productId, amount);
       }
     });
 
@@ -134,27 +134,35 @@ export default class Cart {
   }
 
   onProductUpdate({ product, count }) {
-    if (this.modal) {
+    this.cartIcon.update(this);
+
+    if (document.body.classList.contains("is-modal-open") && !this.isEmpty()) {
+      if (count === 0) {
+        this.modalBody
+          .querySelector(`[data-product-id="${product.id}"]`)
+          .remove();
+      }
       // Элемент, который хранит количество товаров с таким productId в корзине
       const productCount = this.modalBody.querySelector(
         `[data-product-id="${product.id}"] .cart-counter__count`
       );
+      if (productCount === null) return;
 
       //Элемент с общей стоимостью всех единиц этого товара
       let productPrice = this.modalBody.querySelector(
         `[data-product-id="${product.id}"] .cart-product__price`
       );
+
       // Элемент с суммарной стоимостью всех товаров
       let infoPrice = this.modalBody.querySelector(`.cart-buttons__info-price`);
 
       productCount.innerHTML = count;
-      productPrice.innerHTML = `€${(product.price * count).toFixed(2)}`;
+      productPrice.innerHTML = `€${(count * product.price).toFixed(2)}`;
       infoPrice.innerHTML = `€${this.getTotalPrice().toFixed(2)}`;
     }
     if (this.isEmpty()) {
       this.modal.close();
     }
-    this.cartIcon.update(this);
   }
 
   onSubmit(e) {
@@ -171,6 +179,9 @@ export default class Cart {
 
     result.then(() => {
       this.modal.setTitle("Success!");
+      this.modalBody
+        .querySelector('button[type="submit"]')
+        .classList.remove("is-loading");
       this.modalBody.innerHTML = `<div class="modal__body-inner">
       <p>
       Order successful! Your order is being cooked :) <br />
@@ -180,6 +191,7 @@ export default class Cart {
       </div>`;
       this.cartItems = [];
       this.cartIcon.update(this);
+      this.isEmpty();
     });
   }
 

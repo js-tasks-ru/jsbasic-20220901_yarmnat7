@@ -34,10 +34,10 @@ export default class Cart {
     } else {
       cartItem.count += amount;
     }
-    if (cartItem.count === 0)
-      if (cartItem.count === 0) {
-        this.cartItems.splice(this.cartItems.indexOf(cartItem), 1);
-      }
+
+    if (cartItem.count === 0) {
+      this.cartItems.splice(this.cartItems.indexOf(cartItem), 1);
+    }
     this.onProductUpdate(cartItem);
   }
 

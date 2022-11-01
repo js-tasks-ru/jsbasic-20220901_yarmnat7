@@ -44,21 +44,19 @@ export default class CartIcon {
   }
 
   updatePosition = () => {
-    const cart = document.querySelector(".cart-icon");
-    const initialTopCoord = cart.getBoundingClientRect().top;
+    if (!this.elem.offsetHeight || !this.elem.offsetWidth) {
+      return;
+    }
+    const initialTopCoord = this.elem.getBoundingClientRect().top;
 
     let leftIndent =
       Math.min(
         document.querySelector(".container").getBoundingClientRect().right + 20,
-        document.documentElement.clientWidth - cart.offsetWidth - 10
+        document.documentElement.clientWidth - this.elem.offsetWidth - 10
       ) + "px";
 
-    if (!cart.offsetWidth || !cart.offsetHeight) {
-      return;
-    }
-
     if (window.pageYOffset > initialTopCoord) {
-      Object.assign(cart.style, {
+      Object.assign(this.elem.style, {
         position: "fixed",
         top: "50px",
         zIndex: 1e3,
@@ -66,7 +64,16 @@ export default class CartIcon {
         left: leftIndent,
       });
     } else {
-      Object.assign(cart.style, {
+      Object.assign(this.elem.style, {
+        position: "",
+        top: "",
+        left: "",
+        zIndex: "",
+      });
+    }
+
+    if (document.documentElement.clientWidth <= 767) {
+      Object.assign(this.elem.style, {
         position: "",
         top: "",
         left: "",

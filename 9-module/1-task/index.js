@@ -9,5 +9,3 @@ export default function promiseClick(button) {
     );
   });
 }
-
-//promiseClick(button).then((event) => console.log(event));

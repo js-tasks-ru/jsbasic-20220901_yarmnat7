@@ -29,11 +29,10 @@ export default class Cart {
   updateProductCount(productId, amount) {
     let cartItem = this.cartItems.find((item) => item.product.id === productId);
 
-    if (cartItem === undefined) {
+    if (!cartItem) {
       return;
-    } else {
-      cartItem.count += amount;
     }
+    cartItem.count += amount;
 
     if (cartItem.count === 0) {
       this.cartItems.splice(this.cartItems.indexOf(cartItem), 1);

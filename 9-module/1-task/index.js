@@ -1,5 +1,3 @@
-const button = document.querySelector("button");
-
 export default function promiseClick(button) {
   return new Promise((resolve) => {
     button.addEventListener(
@@ -12,4 +10,4 @@ export default function promiseClick(button) {
   });
 }
 
-promiseClick(button).then((event) => console.log(event));
+//promiseClick(button).then((event) => console.log(event));

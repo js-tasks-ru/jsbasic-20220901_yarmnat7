@@ -5,51 +5,46 @@ function initCarousel() {
   const images = document.querySelectorAll(".carousel__slide");
 
   const numOfImages = images.length;
-  let width;
-  let curImg = 0;
+  let curSlide = 0;
 
-  hideLeftArrow(curImg);
+  hideLeftArrow(curSlide);
 
-  function setSize() {
-    width = images[0].offsetWidth;
-    slider.style.transform = `translateX(${-width * curImg}px)`;
+  function moveSlide() {
+    let width = images[0].offsetWidth;
+    slider.style.transform = `translateX(${-width * curSlide}px)`;
+    slider.style.transition = "transform 0.6s ease-in-out";
   }
 
   window.addEventListener("resize", () => {
     slider.style.transition = "none";
-    setSize();
+    moveSlide();
   });
 
-  function hideRightArrow(curImg) {
-    if (curImg === numOfImages - 1) {
+  function hideRightArrow(curSlide) {
+    if (curSlide === numOfImages - 1) {
       arrowRight.style.display = "none";
       return;
     }
   }
 
-  function hideLeftArrow(curImg) {
-    if (curImg === 0) {
+  function hideLeftArrow(curSlide) {
+    if (curSlide === 0) {
       arrowLeft.style.display = "none";
       return;
     }
   }
 
-  function moveSlide() {
-    setSize();
-    slider.style.transition = "transform 0.6s ease-in-out";
-  }
-
   arrowRight.addEventListener("click", () => {
-    curImg++;
-    hideRightArrow(curImg);
+    curSlide++;
+    hideRightArrow(curSlide);
     arrowLeft.style.display = "";
-    moveSlide(curImg);
+    moveSlide(curSlide);
   });
 
   arrowLeft.addEventListener("click", () => {
-    curImg--;
-    hideLeftArrow(curImg);
+    curSlide--;
+    hideLeftArrow(curSlide);
     arrowRight.style.display = "";
-    moveSlide(curImg);
+    moveSlide(curSlide);
   });
 }

@@ -5,13 +5,12 @@ export default class Modal {
 
   constructor() {
     this.#render();
-    this.open();
 
     const closeBtn = this.elem.querySelector(".modal__close");
     closeBtn.addEventListener("click", this.close);
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        this.close();
+        this.close(), { once: true };
       }
     });
   }
@@ -25,18 +24,20 @@ export default class Modal {
     document.body.classList.add("is-modal-open");
   }
 
-  close = () => {
-    document.body.classList.remove("is-modal-open");
-    this.elem.remove();
-  };
-
   setTitle(title) {
     this.elem.querySelector(".modal__title").textContent = title;
   }
 
   setBody(node) {
-    this.elem.querySelector(".modal__body").append(node);
+    const modalBody = this.elem.querySelector(".modal__body");
+    modalBody.innerHTML = "";
+    modalBody.append(node);
   }
+
+  close = () => {
+    document.body.classList.remove("is-modal-open");
+    this.elem.remove();
+  };
 
   #template() {
     return `
